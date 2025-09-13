@@ -1,13 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Verde - Vegetarian Recipe App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>verde</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a clean, modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
   </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Main Content Container -->
+    <main id="main-content" class="min-h-screen flex flex-col items-center justify-center p-4 transition-opacity duration-500">
+        <div class="w-full max-w-2xl mx-auto">
+            <header class="text-center mb-8">
+                <h1 class="text-5xl md:text-6xl font-bold text-green-600">verde</h1>
+                <p class="text-gray-500 mt-2" id="rotating-text">vegetarian-ize any meal.</p>
+            </header>
+
+            <!-- Input Form -->
+            <form id="recipe-form" class="space-y-4">
+                <!-- Dish Name Input with Arrow Button -->
+                <div>
+                    <label for="dish-input" class="block text-sm font-medium text-gray-700 mb-1">dish name</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="dish-input" name="dish" placeholder="e.g., shepherd's pie" required
+                            class="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition">
+                        <button type="submit" id="submit-button"
+                            class="px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition shadow-lg flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters List -->
+                <div class="flex flex-wrap gap-4 text-sm">
+                    <span class="text-gray-500">filters:</span>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="filter" value="vegetarian" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500" checked>
+                        <span class="text-gray-700">vegetarian</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="filter" value="vegan" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                        <span class="text-gray-700">vegan</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="filter" value="kosher" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                        <span class="text-gray-700">kosher</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="filter" value="gluten-free" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                        <span class="text-gray-700">gluten-free</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="filter" value="dairy-free" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                        <span class="text-gray-700">dairy-free</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" name="filter" value="nut-free" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                        <span class="text-gray-700">nut-free</span>
+                    </label>
+                </div>
+
+                <!-- Optional Recipe Input -->
+                <div>
+                    <label for="recipe-input" class="block text-sm font-medium text-gray-700 mb-1">
+                        original recipe (optional)
+                    </label>
+                    <textarea id="recipe-input" name="recipe" rows="6"
+                        placeholder="paste a recipe here for a more accurate conversion..."
+                        class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"></textarea>
+                </div>
+            </form>
+
+        </div>
+
+        <!-- Example Recipes Slider -->
+        <div class="w-full max-w-4xl mt-12">
+            <h2 class="text-xl font-bold text-center mb-4">popular conversions</h2>
+            <div class="example-scroller flex gap-4 overflow-x-auto pb-4">
+                <!-- Example Card 1 -->
+                <div class="flex-shrink-0 w-64 bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="https://placehold.co/600x400/22c55e/ffffff?text=lentil+shepherd's+pie" alt="lentil shepherd's pie" class="w-full h-32 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold">lentil shepherd's pie</h3>
+                        <p class="text-sm text-gray-500">from shepherd's pie</p>
+                    </div>
+                </div>
+                <!-- Example Card 2 -->
+                <div class="flex-shrink-0 w-64 bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="https://placehold.co/600x400/22c55e/ffffff?text=mushroom+bolognese" alt="mushroom bolognese" class="w-full h-32 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold">mushroom bolognese</h3>
+                        <p class="text-sm text-gray-500">from spaghetti bolognese</p>
+                    </div>
+                </div>
+                <!-- Example Card 3 -->
+                <div class="flex-shrink-0 w-64 bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="https://placehold.co/600x400/22c55e/ffffff?text=tofu+tikka+masala" alt="tofu tikka masala" class="w-full h-32 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold">tofu tikka masala</h3>
+                        <p class="text-sm text-gray-500">from chicken tikka masala</p>
+                    </div>
+                </div>
+                <!-- Example Card 4 -->
+                 <div class="flex-shrink-0 w-64 bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="https://placehold.co/600x400/22c55e/ffffff?text=veggie+pot+pie" alt="veggie pot pie" class="w-full h-32 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold">veggie pot pie</h3>
+                        <p class="text-sm text-gray-500">from chicken pot pie</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Screen - Hidden by default -->
+    <div id="loading-screen" class="hidden min-h-screen w-full fixed top-0 left-0 bg-gray-50 flex flex-col items-center justify-center transition-opacity duration-500 opacity-0">
+        <!-- Back Arrow Button -->
+        <button id="back-button" class="absolute top-6 left-6 p-2 text-gray-500 hover:text-gray-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        
+        <div class="text-center">
+            <!-- Simple SVG Spinner -->
+            <svg class="animate-spin h-12 w-12 text-green-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <h2 class="text-2xl font-bold text-green-600 mt-6">our ai chef is working its magic...</h2>
+            <p class="text-gray-500 mt-2">preparing your custom vegetarian recipe.</p>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const recipeForm = document.getElementById('recipe-form');
+            const mainContent = document.getElementById('main-content');
+            const loadingScreen = document.getElementById('loading-screen');
+            const rotatingText = document.getElementById('rotating-text');
+            const backButton = document.getElementById('back-button');
+
+            // Rotating text effect
+            const textOptions = [
+                'vegetarian-ize any meal.',
+                'vegan-ize any meal.',
+                'kosher-ize any meal.',
+                'gluten-free-ize any meal.',
+                'dairy-free-ize any meal.',
+                'nut-free-ize any meal.',
+                'plant-based-ize any meal.'
+            ];
+            
+            let currentIndex = 0;
+            
+            function rotateText() {
+                rotatingText.style.opacity = '0';
+                setTimeout(() => {
+                    currentIndex = (currentIndex + 1) % textOptions.length;
+                    rotatingText.textContent = textOptions[currentIndex];
+                    rotatingText.style.opacity = '1';
+                }, 300);
+            }
+            
+            // Start rotating text every 3 seconds
+            setInterval(rotateText, 3000);
+
+            // Back button functionality
+            backButton.addEventListener('click', () => {
+                // Fade out the loading screen
+                loadingScreen.classList.add('opacity-0');
+                
+                // After the fade-out animation, hide the loading screen and show the main content
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                    mainContent.style.display = 'flex';
+                    // Fade in the main content
+                    setTimeout(() => mainContent.classList.remove('opacity-0'), 20);
+                }, 500);
+            });
+
+            // Event listener for the form submission
+            recipeForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent the default page reload
+
+                // 1. GATHER ALL USER INPUTS
+                const dishName = document.getElementById('dish-input').value;
+                const originalRecipe = document.getElementById('recipe-input').value;
+                
+                // Get all checked filter checkboxes
+                const checkedFilters = document.querySelectorAll('input[name="filter"]:checked');
+                const activeFilters = Array.from(checkedFilters).map(checkbox => checkbox.value);
+
+                // 2. PREPARE DATA FOR THE BACKEND
+                // This data object is exactly what your FastAPI backend will receive as a JSON body.
+                const requestData = {
+                    dish_name: dishName,
+                    original_recipe: originalRecipe,
+                    filters: activeFilters
+                };
+                
+                console.log('Data being sent to backend:', requestData);
+
+                // 3. TRANSITION TO THE LOADING SCREEN
+                // Fade out the main content
+                mainContent.classList.add('opacity-0');
+                
+                // After the fade-out animation, hide the main content and show the loading screen
+                setTimeout(() => {
+                    mainContent.style.display = 'none';
+                    loadingScreen.classList.remove('hidden');
+                    // Fade in the loading screen
+                    setTimeout(() => loadingScreen.classList.remove('opacity-0'), 20); 
+                }, 500);
+
+
+                // 4. CALL THE BACKEND (ai1.py via FastAPI)
+                // In your actual project, you would uncomment and use this section.
+                /*
+                try {
+                    // The URL should point to your FastAPI server's endpoint.
+                    const response = await fetch('http://127.0.0.1:8000/generate-recipe', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    // ONCE YOU GET THE RESULT:
+                    // You would then redirect the user to a results page, or
+                    // hide the loading screen and display the results on this page.
+                    // For example:
+                    // window.location.href = `/recipe?id=${result.recipe_id}`;
+                    console.log('Received from backend:', result);
+
+                } catch (error) {
+                    console.error("Failed to fetch recipe:", error);
+                    // Here you would handle the error, e.g., show an error message
+                    // and bring the user back to the main screen.
+                    alert('Sorry, something went wrong. Please try again!');
+                    // This is a simple way to revert the UI on error
+                    loadingScreen.classList.add('opacity-0');
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        mainContent.style.display = 'flex';
+                         setTimeout(() => mainContent.classList.remove('opacity-0'), 20);
+                    }, 500);
+                }
+                */
+            });
+        });
+    </script>
+
   </body>
 </html>
