@@ -141,14 +141,84 @@
         </div>
     </div>
 
+    <!-- Results Screen - Changed from fixed to absolute positioning for better scrolling -->
+    <div id="results-screen" class="hidden w-full absolute top-0 left-0 bg-gray-50 transition-opacity duration-500 opacity-0">
+        <!-- Header with back button -->
+        <div class="bg-white shadow-sm border-b sticky top-0 z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold text-green-600">verde</h1>
+                        <span class="ml-2 text-gray-500">recipe comparison</span>
+                    </div>
+                    <button id="results-back-button" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+                        New Recipe
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollable content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Original Recipe -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-red-50 px-6 py-4 border-b">
+                        <h2 class="text-xl font-bold text-red-700 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            </svg>
+                            Original Recipe
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        <div id="original-recipe-content" class="prose prose-sm max-w-none whitespace-pre-wrap overflow-y-auto max-h-96">
+                            <!-- Original recipe content will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vegetarian Recipe -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-green-50 px-6 py-4 border-b">
+                        <h2 class="text-xl font-bold text-green-700 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            </svg>
+                            Vegetarian Version
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        <div id="vegetarian-recipe-content" class="prose prose-sm max-w-none whitespace-pre-wrap overflow-y-auto max-h-96">
+                            <!-- Vegetarian recipe content will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-8 text-center">
+                <button id="copy-vegetarian-btn" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition mr-4">
+                    Copy Vegetarian Recipe
+                </button>
+                <button id="new-recipe-btn" class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+                    New Recipe
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const recipeForm = document.getElementById('recipe-form');
             const mainContent = document.getElementById('main-content');
             const loadingScreen = document.getElementById('loading-screen');
+            const resultsScreen = document.getElementById('results-screen');
             const rotatingText = document.getElementById('rotating-text');
             const backButton = document.getElementById('back-button');
+            const resultsBackButton = document.getElementById('results-back-button');
+            const copyVegetarianBtn = document.getElementById('copy-vegetarian-btn');
+            const newRecipeBtn = document.getElementById('new-recipe-btn');
 
             // Rotating text effect
             const textOptions = [
@@ -189,6 +259,50 @@
                 }, 500);
             });
 
+            // Results back button functionality
+            resultsBackButton.addEventListener('click', () => {
+                // Fade out the results screen
+                resultsScreen.classList.add('opacity-0');
+                
+                // After the fade-out animation, hide the results screen and show the main content
+                setTimeout(() => {
+                    resultsScreen.classList.add('hidden');
+                    mainContent.style.display = 'flex';
+                    // Fade in the main content
+                    setTimeout(() => mainContent.classList.remove('opacity-0'), 20);
+                }, 500);
+            });
+
+            // New recipe button
+            newRecipeBtn.addEventListener('click', () => {
+                // Fade out the results screen
+                resultsScreen.classList.add('opacity-0');
+                
+                // After the fade-out animation, hide the results screen and show the main content
+                setTimeout(() => {
+                    resultsScreen.classList.add('hidden');
+                    mainContent.style.display = 'flex';
+                    // Fade in the main content
+                    setTimeout(() => mainContent.classList.remove('opacity-0'), 20);
+                }, 500);
+            });
+
+            // Copy vegetarian recipe button
+            copyVegetarianBtn.addEventListener('click', () => {
+                const vegetarianContent = document.getElementById('vegetarian-recipe-content').textContent;
+                navigator.clipboard.writeText(vegetarianContent).then(() => {
+                    // Show success feedback
+                    const btn = copyVegetarianBtn;
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    btn.classList.add('bg-green-500');
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.classList.remove('bg-green-500');
+                    }, 2000);
+                });
+            });
+
             // Event listener for the form submission
             recipeForm.addEventListener('submit', async (event) => {
                 event.preventDefault(); // Prevent the default page reload
@@ -202,7 +316,6 @@
                 const activeFilters = Array.from(checkedFilters).map(checkbox => checkbox.value);
 
                 // 2. PREPARE DATA FOR THE BACKEND
-                // This data object is exactly what your FastAPI backend will receive as a JSON body.
                 const requestData = {
                     dish_name: dishName,
                     original_recipe: originalRecipe,
@@ -212,24 +325,17 @@
                 console.log('data being sent to backend:', requestData);
 
                 // 3. TRANSITION TO THE LOADING SCREEN
-                // Fade out the main content
                 mainContent.classList.add('opacity-0');
                 
-                // After the fade-out animation, hide the main content and show the loading screen
                 setTimeout(() => {
                     mainContent.style.display = 'none';
                     loadingScreen.classList.remove('hidden');
-                    // Fade in the loading screen
                     setTimeout(() => loadingScreen.classList.remove('opacity-0'), 20); 
                 }, 500);
 
-
-                // 4. CALL THE BACKEND (ai1.py via FastAPI)
-                // In your actual project, you would uncomment and use this section.
-                /*
+                // 4. CALL THE BACKEND WITH YOUR AI PIPELINE
                 try {
-                    // The URL should point to your FastAPI server's endpoint.
-                    const response = await fetch('http://127.0.0.1:8000/generate-recipe', {
+                    const response = await fetch('/generate-recipe', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -243,28 +349,40 @@
 
                     const result = await response.json();
                     
-                    // ONCE YOU GET THE RESULT:
-                    // You would then redirect the user to a results page, or
-                    // hide the loading screen and display the results on this page.
-                    // For example:
-                    // window.location.href = `/recipe?id=${result.recipe_id}`;
-                    console.log('Received from backend:', result);
+                    if (result.success) {
+                        // Show the results
+                        displayResults(result.original_recipe, result.vegetarian_recipe);
+                    } else {
+                        throw new Error(result.error_message || 'Failed to generate recipe');
+                    }
 
                 } catch (error) {
                     console.error("Failed to fetch recipe:", error);
-                    // Here you would handle the error, e.g., show an error message
-                    // and bring the user back to the main screen.
                     alert('Sorry, something went wrong. Please try again!');
-                    // This is a simple way to revert the UI on error
+                    // Revert the UI on error
                     loadingScreen.classList.add('opacity-0');
                     setTimeout(() => {
                         loadingScreen.classList.add('hidden');
                         mainContent.style.display = 'flex';
-                         setTimeout(() => mainContent.classList.remove('opacity-0'), 20);
+                        setTimeout(() => mainContent.classList.remove('opacity-0'), 20);
                     }, 500);
                 }
-                */
             });
+
+            function displayResults(original, vegetarian) {
+                // Hide loading screen and show results
+                loadingScreen.classList.add('opacity-0');
+                
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                    resultsScreen.classList.remove('hidden');
+                    setTimeout(() => resultsScreen.classList.remove('opacity-0'), 20);
+                }, 500);
+
+                // Display the recipes
+                document.getElementById('original-recipe-content').textContent = original;
+                document.getElementById('vegetarian-recipe-content').textContent = vegetarian;
+            }
         });
     </script>
 

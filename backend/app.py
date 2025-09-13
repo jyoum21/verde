@@ -1,7 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import os
+import traceback
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -13,137 +16,116 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for React frontend
+# Enable CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:8000", "http://127.0.0.1:8000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Serve static files
+app.mount("/static", StaticFiles(directory="../frontend"), name="static")
+
 # Pydantic models for request/response
 class RecipeRequest(BaseModel):
-    dish: str
+    dish_name: str
+    original_recipe: str = ""
+    filters: list[str] = []
 
 class RecipeResponse(BaseModel):
-    name: str
-    ingredients: list[str]
-    instructions: list[str]
-    cook_time: str
-    servings: int
-    note: str = None
+    original_recipe: str
+    vegetarian_recipe: str
+    success: bool
+    error_message: str = None
 
-# Sample vegetarian recipe database
-VEGETARIAN_RECIPES = {
-    "pasta": {
-        "name": "Creamy Mushroom Pasta",
-        "ingredients": [
-            "8 oz pasta",
-            "2 cups mixed mushrooms",
-            "3 cloves garlic",
-            "1 cup heavy cream",
-            "1/2 cup parmesan cheese",
-            "2 tbsp olive oil",
-            "Salt and pepper to taste"
-        ],
-        "instructions": [
-            "Cook pasta according to package directions",
-            "Heat olive oil in a large pan",
-            "Add mushrooms and garlic, cook until tender",
-            "Add cream and simmer until thickened",
-            "Toss with pasta and parmesan",
-            "Season with salt and pepper"
-        ],
-        "cook_time": "20 minutes",
-        "servings": 4
-    },
-    "burger": {
-        "name": "Black Bean Veggie Burger",
-        "ingredients": [
-            "1 can black beans",
-            "1/2 cup breadcrumbs",
-            "1/4 cup diced onion",
-            "2 cloves garlic",
-            "1 egg (or flax egg for vegan)",
-            "1 tsp cumin",
-            "Salt and pepper to taste"
-        ],
-        "instructions": [
-            "Mash black beans in a bowl",
-            "Add breadcrumbs, onion, garlic, and spices",
-            "Form into patties",
-            "Cook in a pan for 4-5 minutes per side",
-            "Serve on buns with your favorite toppings"
-        ],
-        "cook_time": "15 minutes",
-        "servings": 4
-    }
-}
+@app.get("/")
+async def serve_frontend():
+    """Serve the main frontend page"""
+    return FileResponse("../frontend/index.html")
 
-def generate_vegetarian_recipe(dish_name):
-    """Generate a vegetarian version of the requested dish"""
-    dish_lower = dish_name.lower()
-    
-    # Check if we have a direct match
-    if dish_lower in VEGETARIAN_RECIPES:
-        return VEGETARIAN_RECIPES[dish_lower]
-    
-    # Generate a custom recipe based on the dish
-    return {
-        "name": f"Vegetarian {dish_name.title()}",
-        "ingredients": [
-            "2 cups vegetables of choice",
-            "1 cup plant-based protein (tofu, tempeh, or beans)",
-            "2 tbsp olive oil",
-            "3 cloves garlic",
-            "1 tsp herbs and spices",
-            "Salt and pepper to taste"
-        ],
-        "instructions": [
-            "Prepare your vegetables by washing and chopping",
-            "Heat olive oil in a pan over medium heat",
-            "Add garlic and cook until fragrant",
-            "Add vegetables and cook until tender",
-            "Add plant-based protein and seasonings",
-            "Cook until heated through",
-            "Serve hot and enjoy!"
-        ],
-        "cook_time": "25 minutes",
-        "servings": 2,
-        "note": f"This is a vegetarian adaptation of {dish_name}. Feel free to customize with your favorite vegetables and seasonings!"
-    }
-
-@app.post("/api/recipe", response_model=RecipeResponse)
-async def get_recipe(request: RecipeRequest):
-    """API endpoint to generate vegetarian recipes"""
+@app.post("/generate-recipe", response_model=RecipeResponse)
+async def generate_recipe(request: RecipeRequest):
+    """API endpoint to generate vegetarian recipes using AI pipeline"""
     try:
-        dish = request.dish.strip()
+        print(f"Received request: dish_name='{request.dish_name}', original_recipe='{request.original_recipe[:50]}...'")
         
-        if not dish:
+        dish_name = request.dish_name.strip()
+        original_recipe = request.original_recipe.strip()
+        
+        if not dish_name:
             raise HTTPException(status_code=400, detail="Please provide a dish name")
         
-        recipe = generate_vegetarian_recipe(dish)
-        return RecipeResponse(**recipe)
+        # If no original recipe provided, create a basic one
+        if not original_recipe:
+            original_recipe = f"Recipe for {dish_name}"
+        
+        print(f"Processing recipe: {original_recipe[:100]}...")
+        
+        # Import here to catch import errors
+        try:
+            from AIs import vegify
+        except Exception as import_error:
+            print(f"Import error: {import_error}")
+            raise Exception(f"Failed to import AI module: {import_error}")
+        
+        # Use the AI pipeline to convert the recipe
+        print("Calling vegify...")
+        vegetarian_recipe = vegify(original_recipe)
+        print(f"Got result: {vegetarian_recipe[:100]}...")
+        
+        return RecipeResponse(
+            original_recipe=original_recipe,
+            vegetarian_recipe=vegetarian_recipe,
+            success=True
+        )
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        error_msg = str(e)
+        print(f"Error in generate_recipe: {error_msg}")
+        print(f"Traceback: {traceback.format_exc()}")
+        
+        return RecipeResponse(
+            original_recipe=request.original_recipe if request.original_recipe else "",
+            vegetarian_recipe="",
+            success=False,
+            error_message=error_msg
+        )
 
 @app.get("/api/health")
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "message": "Verde API is running!"}
 
-@app.get("/")
-async def root():
-    """Root endpoint with API information"""
-    return {
-        "message": "Welcome to Verde API!",
-        "docs": "/docs",
-        "health": "/api/health"
+@app.get("/api/debug")
+async def debug_info():
+    """Debug endpoint to check system status"""
+    debug_info = {
+        "working_directory": os.getcwd(),
+        "api_key_set": bool(os.environ.get("CEREBRAS_API_KEY")),
+        "context_files": {}
     }
+    
+    context_files = [
+        'contexts/prep_ai_context.txt',
+        'contexts/brainstorm_ai_context.txt', 
+        'contexts/integration_ai_context.txt',
+        'contexts/checker_ai_context.txt'
+    ]
+    
+    for file_path in context_files:
+        debug_info["context_files"][file_path] = os.path.exists(file_path)
+    
+    try:
+        from AIs import vegify
+        debug_info["ai_import"] = "success"
+    except Exception as e:
+        debug_info["ai_import"] = str(e)
+    
+    return debug_info
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 5000))
-    uvicorn.run(app, host="0.0.0.0", port=port, reload=True)
+    port = int(os.environ.get("PORT", 8000))  # Changed from 5000 to 8000
+    uvicorn.run(app, host="0.0.0.0", port=port)
