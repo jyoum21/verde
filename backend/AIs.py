@@ -1,6 +1,8 @@
 import os
 from cerebras.cloud.sdk import Cerebras
 
+os.environ["CEREBRAS_API_KEY"] = "csk-4xnhky9yjn4nwnktjw3hpjwf592mkeywfcm3e3w96e5enw3h"
+
 client = Cerebras(
     # This is the default and can be omitted
     api_key=os.environ.get("CEREBRAS_API_KEY"),
@@ -9,7 +11,7 @@ client = Cerebras(
 def vegify(input_recipe):
   formatted_recipe = preparation_ai(input_recipe)
   if formatted_recipe == "Not a recipe":
-    return "Sorry, something went wrong."
+    return "Sorry, something went wrong here."
   suggestions = brainstorm_ai(formatted_recipe)
   new_recipe = integration_ai(formatted_recipe, suggestions)
   if checker_ai(new_recipe):

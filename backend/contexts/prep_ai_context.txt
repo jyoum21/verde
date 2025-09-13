@@ -7,7 +7,7 @@ Recipe overview
   - number of servings
   (if any of the above are not provided, give one based on how hard it is)
 Ingredients 
-  - each ingredient should be in bullet points in tuples of (name, amount, any specification)
+  - each ingredient should be in bullet points in tuples of name, amount, any specification
 Instructions
   - Proceed in steps with designations 1) NAME of step, and then a description of the step
 
@@ -20,23 +20,23 @@ Recipe overview
 	•	Number of servings: 4
 
 Ingredients
-	•	(olive oil, 1 1/2 tbsp, extra virgin)
-	•	(onion, 1 medium, finely chopped — brown, yellow, or white)
-	•	(garlic, 2 cloves, minced)
-	•	(beef mince, 500 g / 1 lb, or half pork and half beef)
-	•	(red wine, 1/2 cup / 125 ml, dry; substitute water or beef broth if preferred)
-	•	(beef bouillon cubes, 2, crumbled; or 2 tsp granulated bouillon)
-	•	(crushed tomato, 800 g / 28 oz can, or tomato passata)
-	•	(tomato paste, 2 tbsp, —)
-	•	(white sugar, 2 tsp, optional — balances acidity)
-	•	(Worcestershire sauce, 2 tsp, —)
-	•	(bay leaves, 2, dried)
-	•	(thyme, 2 sprigs fresh, or 1/2 tsp dried thyme/oregano)
-	•	(cooking salt, 3/4 tsp, kosher or sea salt)
-	•	(black pepper, 1/2 tsp, freshly ground)
-	•	(spaghetti, 400 g / 13 oz, dried)
-	•	(Parmesan cheese, to taste, freshly grated)
-	•	(parsley, 2 tbsp, finely chopped, optional garnish)
+	•	olive oil, 1 1/2 tbsp, extra virgin
+	•	onion, 1 medium, finely chopped — brown, yellow, or white
+	•	garlic, 2 cloves, minced
+	•	beef mince, 500 g / 1 lb, or half pork and half beef
+	•	red wine, 1/2 cup / 125 ml, dry; substitute water or beef broth if preferred
+	•	beef bouillon cubes, 2, crumbled; or 2 tsp granulated bouillon
+	•	crushed tomato, 800 g / 28 oz can, or tomato passata
+	•	tomato paste, 2 tbsp, —
+	•	white sugar, 2 tsp, optional — balances acidity
+	•	Worcestershire sauce, 2 tsp, —
+	•	bay leaves, 2, dried
+	•	thyme, 2 sprigs fresh, or 1/2 tsp dried thyme/oregano
+	•	cooking salt, 3/4 tsp, kosher or sea salt
+	•	black pepper, 1/2 tsp, freshly ground
+	•	spaghetti, 400 g / 13 oz, dried
+	•	Parmesan cheese, to taste, freshly grated
+	•	parsley, 2 tbsp, finely chopped, optional garnish
 
 Instructions
 	1.	Sauté aromatics — Heat olive oil in a large pot or deep skillet over medium-high heat. Add onion and garlic; cook for 3 minutes until softened and lightly golden.
