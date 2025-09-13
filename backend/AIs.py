@@ -8,13 +8,18 @@ client = Cerebras(
     api_key=os.environ.get("CEREBRAS_API_KEY"),
 )
 
-def vegify(input_recipe):
+def vegify(input_recipe, restrictions):
+  '''
+  Vegify is a function that will take in a recipe and a list of restrictions (represented as strings), and return a recipe that follows the restrictions.
+  '''
+  
   formatted_recipe = preparation_ai(input_recipe)
   if formatted_recipe == "Not a recipe":
     return "Sorry, something went wrong here."
-  suggestions = brainstorm_ai(formatted_recipe)
-  new_recipe = integration_ai(formatted_recipe, suggestions)
-  if checker_ai(new_recipe):
+  suggestions = brainstorm_ai(formatted_recipe, restrictions)
+  new_recipe = integration_ai(formatted_recipe, suggestions, restrictions)
+  
+  if checker_ai(new_recipe, restrictions):
     return new_recipe
   else:
     return "Sorry, something went wrong."
@@ -40,7 +45,7 @@ def preparation_ai(input_recipe):
 
   return chat_completion.choices[0].message.content
 
-def brainstorm_ai(input_recipe):
+def brainstorm_ai(input_recipe, restrictions):
   with open('contexts/brainstorm_ai_context.txt', 'r') as file:
     system_content = file.read()
   
@@ -48,7 +53,7 @@ def brainstorm_ai(input_recipe):
     messages=[
         {
             "role": "system",
-            "content": system_content,
+            "content": "You are the second of a series of LLMs that will taken in a recipe, and adapt it to follow different dietary restrictions. The restrictions you want to follow are " + ", ".join(restrictions) + ". " + system_content,
         },
         {
             "role": "user", 
@@ -60,7 +65,7 @@ def brainstorm_ai(input_recipe):
 
   return chat_completion.choices[0].message.content
 
-def integration_ai(input_recipe, suggestions):
+def integration_ai(input_recipe, suggestions, restrictions):
   with open('contexts/integration_ai_context.txt', 'r') as file:
     system_content = file.read()
   
@@ -68,7 +73,7 @@ def integration_ai(input_recipe, suggestions):
     messages=[
         {
             "role": "system",
-            "content": system_content,
+            "content": "You are the second of a series of LLMs that will taken in a recipe, and adapt it to follow different dietary restrictions. The restrictions you want to follow are " + ", ".join(restrictions) + ". " + system_content,
         },
         {
             "role": "user", 
@@ -80,7 +85,7 @@ def integration_ai(input_recipe, suggestions):
 
   return chat_completion.choices[0].message.content
 
-def checker_ai(input_recipe):
+def checker_ai(input_recipe, restrictions):
   with open('contexts/checker_ai_context.txt', 'r') as file:
     system_content = file.read()
   
@@ -88,7 +93,7 @@ def checker_ai(input_recipe):
     messages=[
         {
             "role": "system",
-            "content": system_content,
+            "content": "You are the fourth of a series of LLMs that will taken in a recipe, and adapt it to follow different dietary restrictions. The restrictions you want to follow are " + ", ".join(restrictions) + ". " + system_content,
         },
         {
             "role": "user", 
@@ -98,9 +103,9 @@ def checker_ai(input_recipe):
       model="llama-4-scout-17b-16e-instruct",
   )
 
-  return chat_completion.choices[0].message.content == "Vegetarian"
+  return chat_completion.choices[0].message.content == "yes"
 
-
-with open('test.txt', 'r') as file:
-  system_content = file.read()
-print(vegify(system_content))
+# Test code - commented out to avoid import errors
+# with open('test.txt', 'r') as file:
+#   system_content = file.read()
+# print(vegify(system_content, ["vegetarian"]))

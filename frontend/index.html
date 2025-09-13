@@ -181,7 +181,7 @@
                 <!-- Vegetarian Recipe -->
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="bg-green-50 px-6 py-4 border-b">
-                        <h2 class="text-xl font-bold text-green-700 flex items-center">
+                        <h2 id="vegetarian-recipe-title" class="text-xl font-bold text-green-700 flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
                             </svg>
@@ -199,7 +199,7 @@
             <!-- Action Buttons -->
             <div class="mt-8 text-center">
                 <button id="copy-vegetarian-btn" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition mr-4">
-                    Copy Vegetarian Recipe
+                    Copy New Recipe
                 </button>
                 <button id="new-recipe-btn" class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
                     New Recipe
@@ -219,6 +219,7 @@
             const resultsBackButton = document.getElementById('results-back-button');
             const copyVegetarianBtn = document.getElementById('copy-vegetarian-btn');
             const newRecipeBtn = document.getElementById('new-recipe-btn');
+            const vegetarianRecipeTitle = document.getElementById('vegetarian-recipe-title');
 
             // Rotating text effect
             const textOptions = [
@@ -244,6 +245,23 @@
             
             // Start rotating text every 3 seconds
             setInterval(rotateText, 3000);
+
+            // Function to format restrictions into a readable string
+            function formatRestrictions(restrictions) {
+                if (!restrictions || restrictions.length === 0) {
+                    return "vegetarian";
+                }
+                
+                // Sort restrictions for consistent ordering
+                const sortedRestrictions = restrictions.sort();
+                
+                // Join with spaces and capitalize first letter of each word
+                return sortedRestrictions.map(restriction => {
+                    return restriction.split('-').map(word => 
+                        word.charAt(0).toUpperCase() + word.slice(1)
+                    ).join('-');
+                }).join(' ');
+            }
 
             // Back button functionality
             backButton.addEventListener('click', () => {
@@ -350,8 +368,8 @@
                     const result = await response.json();
                     
                     if (result.success) {
-                        // Show the results
-                        displayResults(result.original_recipe, result.vegetarian_recipe);
+                        // Show the results with formatted restrictions
+                        displayResults(result.original_recipe, result.vegetarian_recipe, activeFilters);
                     } else {
                         throw new Error(result.error_message || 'Failed to generate recipe');
                     }
@@ -369,7 +387,7 @@
                 }
             });
 
-            function displayResults(original, vegetarian) {
+            function displayResults(original, vegetarian, restrictions) {
                 // Hide loading screen and show results
                 loadingScreen.classList.add('opacity-0');
                 
@@ -378,6 +396,17 @@
                     resultsScreen.classList.remove('hidden');
                     setTimeout(() => resultsScreen.classList.remove('opacity-0'), 20);
                 }, 500);
+
+                // Format restrictions for display
+                const formattedRestrictions = formatRestrictions(restrictions);
+                
+                // Update the vegetarian recipe title
+                vegetarianRecipeTitle.innerHTML = `
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                    </svg>
+                    ${formattedRestrictions} Version
+                `;
 
                 // Display the recipes
                 document.getElementById('original-recipe-content').textContent = original;

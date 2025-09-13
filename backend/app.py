@@ -49,10 +49,11 @@ async def serve_frontend():
 async def generate_recipe(request: RecipeRequest):
     """API endpoint to generate vegetarian recipes using AI pipeline"""
     try:
-        print(f"Received request: dish_name='{request.dish_name}', original_recipe='{request.original_recipe[:50]}...'")
+        print(f"Received request: dish_name='{request.dish_name}', original_recipe='{request.original_recipe[:50]}...', filters={request.filters}")
         
         dish_name = request.dish_name.strip()
         original_recipe = request.original_recipe.strip()
+        restrictions = request.filters  # This is the list of checked dietary restrictions
         
         if not dish_name:
             raise HTTPException(status_code=400, detail="Please provide a dish name")
@@ -61,7 +62,12 @@ async def generate_recipe(request: RecipeRequest):
         if not original_recipe:
             original_recipe = f"Recipe for {dish_name}"
         
+        # Ensure we have at least vegetarian as a restriction
+        if not restrictions:
+            restrictions = ["vegetarian"]
+        
         print(f"Processing recipe: {original_recipe[:100]}...")
+        print(f"Dietary restrictions: {restrictions}")
         
         # Import here to catch import errors
         try:
@@ -70,9 +76,9 @@ async def generate_recipe(request: RecipeRequest):
             print(f"Import error: {import_error}")
             raise Exception(f"Failed to import AI module: {import_error}")
         
-        # Use the AI pipeline to convert the recipe
-        print("Calling vegify...")
-        vegetarian_recipe = vegify(original_recipe)
+        # Use the AI pipeline to convert the recipe with restrictions
+        print("Calling vegify with restrictions...")
+        vegetarian_recipe = vegify(original_recipe, restrictions)
         print(f"Got result: {vegetarian_recipe[:100]}...")
         
         return RecipeResponse(
@@ -127,5 +133,5 @@ async def debug_info():
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8000))  # Changed from 5000 to 8000
+    port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
