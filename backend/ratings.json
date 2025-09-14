@@ -5,5 +5,12 @@
     "user_name": "Test User",
     "comment": "",
     "timestamp": "2025-09-13T22:36:12.263494"
+  },
+  {
+    "recipe_name": "\ud83c\udf57 Garlic Butter Chicken Thighs",
+    "rating": 4,
+    "user_name": "Daniel",
+    "comment": "",
+    "timestamp": "2025-09-13T22:57:33.374289"
   }
 ]

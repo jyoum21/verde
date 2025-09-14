@@ -246,6 +246,42 @@
                         <div id="vegetarian-recipe-content" class="prose prose-sm max-w-none whitespace-pre-wrap overflow-y-auto max-h-96">
                             <!-- Vegetarian recipe content will be inserted here -->
                         </div>
+                        
+                        <!-- Rating Section for Generated Recipe -->
+                        <div class="mt-6 pt-4 border-t">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-medium text-gray-700">Rate this recipe:</span>
+                                <div class="flex items-center">
+                                    <span class="text-sm text-gray-500 mr-2" id="generated-recipe-rating-display">★★★★★ (0.0)</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-1 mb-3">
+                                <button class="star-rating" data-recipe="Generated Recipe" data-rating="1" data-target="generated-recipe-rating-display">
+                                    <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
+                                </button>
+                                <button class="star-rating" data-recipe="Generated Recipe" data-rating="2" data-target="generated-recipe-rating-display">
+                                    <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
+                                </button>
+                                <button class="star-rating" data-recipe="Generated Recipe" data-rating="3" data-target="generated-recipe-rating-display">
+                                    <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
+                                </button>
+                                <button class="star-rating" data-recipe="Generated Recipe" data-rating="4" data-target="generated-recipe-rating-display">
+                                    <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
+                                </button>
+                                <button class="star-rating" data-recipe="Generated Recipe" data-rating="5" data-target="generated-recipe-rating-display">
+                                    <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
+                                </button>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input type="text" placeholder="Your name (optional)" 
+                                       class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-500"
+                                       data-recipe="Generated Recipe">
+                                <button class="submit-rating px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition"
+                                        data-recipe="Generated Recipe">
+                                    Rate Recipe
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -465,6 +501,123 @@
                 // Display the recipes
                 document.getElementById('original-recipe-content').textContent = original;
                 document.getElementById('vegetarian-recipe-content').textContent = vegetarian;
+                
+                // Update recipe name for rating system
+                const recipeName = document.getElementById('dish-input').value || 'Generated Recipe';
+                updateRecipeNameForRating(recipeName);
+                
+                // Initialize rating system for generated recipe
+                initializeRatingSystem();
+            }
+            
+            // Update recipe name for rating system
+            function updateRecipeNameForRating(recipeName) {
+                // Update all rating elements with the new recipe name
+                document.querySelectorAll('[data-recipe="Generated Recipe"]').forEach(element => {
+                    element.setAttribute('data-recipe', recipeName);
+                });
+                
+                // Update the rating display ID
+                const ratingDisplay = document.getElementById('generated-recipe-rating-display');
+                if (ratingDisplay) {
+                    ratingDisplay.id = `${recipeName.toLowerCase().replace(/\s+/g, '-')}-rating-display`;
+                }
+            }
+            
+            // Rating system functionality
+            function initializeRatingSystem() {
+                const currentRatings = {}; // Store current user ratings
+                
+                function updateStarDisplay(recipeName, rating) {
+                    const stars = document.querySelectorAll(`[data-recipe="${recipeName}"].star-rating`);
+                    stars.forEach((star, index) => {
+                        const starSpan = star.querySelector('span');
+                        if (index < rating) {
+                            starSpan.classList.remove('text-gray-300');
+                            starSpan.classList.add('text-yellow-400');
+                        } else {
+                            starSpan.classList.remove('text-yellow-400');
+                            starSpan.classList.add('text-gray-300');
+                        }
+                    });
+                }
+
+                function updateRatingDisplay(recipeName, averageRating, totalRatings) {
+                    const displayElement = document.getElementById(`${recipeName.toLowerCase().replace(/\s+/g, '-')}-rating-display`);
+                    if (displayElement) {
+                        const stars = '★'.repeat(Math.floor(averageRating)) + '☆'.repeat(5 - Math.floor(averageRating));
+                        displayElement.textContent = `${stars} (${averageRating})`;
+                    }
+                }
+
+                // Star rating click handlers
+                document.querySelectorAll('.star-rating').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const recipeName = button.dataset.recipe;
+                        const rating = parseInt(button.dataset.rating);
+                        
+                        currentRatings[recipeName] = rating;
+                        updateStarDisplay(recipeName, rating);
+                    });
+                });
+
+                // Submit rating handlers
+                document.querySelectorAll('.submit-rating').forEach(button => {
+                    button.addEventListener('click', async (e) => {
+                        const recipeName = button.dataset.recipe;
+                        const rating = currentRatings[recipeName];
+                        
+                        if (!rating) {
+                            alert('Please select a rating first!');
+                            return;
+                        }
+
+                        const nameInput = document.querySelector(`input[data-recipe="${recipeName}"]`);
+                        const userName = nameInput.value.trim() || 'Anonymous';
+
+                        try {
+                            const response = await fetch('/api/rate-recipe', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    recipe_name: recipeName,
+                                    rating: rating,
+                                    user_name: userName,
+                                    comment: ''
+                                }),
+                            });
+
+                            const result = await response.json();
+                            
+                            if (result.success) {
+                                // Update the display with new average
+                                updateRatingDisplay(recipeName, result.average_rating, result.total_ratings);
+                                
+                                // Show success message
+                                const originalText = button.textContent;
+                                button.textContent = 'Rated!';
+                                button.classList.add('bg-green-500');
+                                
+                                setTimeout(() => {
+                                    button.textContent = originalText;
+                                    button.classList.remove('bg-green-500');
+                                }, 2000);
+                                
+                                // Clear the rating selection
+                                delete currentRatings[recipeName];
+                                updateStarDisplay(recipeName, 0);
+                                nameInput.value = '';
+                            } else {
+                                alert('Failed to submit rating: ' + result.message);
+                            }
+                        } catch (error) {
+                            console.error('Error submitting rating:', error);
+                            alert('Failed to submit rating. Please try again.');
+                        }
+                    });
+                });
             }
         });
     </script>
