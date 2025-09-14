@@ -564,8 +564,56 @@
     </div>
 
     <script>
+        // Cookie utility functions
+        function setCookie(name, value, days = 365) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
         // Enhanced search functionality and rating system
         document.addEventListener('DOMContentLoaded', () => {
+            // Check for recipe parameter in URL and scroll to specific recipe
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetRecipe = urlParams.get('recipe');
+            
+            if (targetRecipe) {
+                // Wait a bit for the page to fully load, then scroll to the recipe
+                setTimeout(() => {
+                    scrollToRecipe(targetRecipe);
+                }, 500);
+            }
+
+            // Load saved name from cookies
+            const savedName = getCookie('userName');
+            if (savedName) {
+                const nameInputs = document.querySelectorAll('input[placeholder="Your name (optional)"]');
+                nameInputs.forEach(input => {
+                    input.value = savedName;
+                });
+            }
+
+            // Save name to cookies when user types
+            const nameInputs = document.querySelectorAll('input[placeholder="Your name (optional)"]');
+            nameInputs.forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const userName = e.target.value.trim();
+                    if (userName) {
+                        setCookie('userName', userName);
+                    }
+                });
+            });
             const searchInput = document.getElementById('search-input');
             const sortButtons = document.querySelectorAll('#sort-popularity, #sort-rating, #sort-time');
             const recipesGrid = document.getElementById('recipes-grid');
@@ -712,15 +760,11 @@
                             // Update the display with new average
                             updateRatingDisplay(recipeName, result.average_rating, result.total_ratings);
                             
-                            // Show success message
-                            const originalText = button.textContent;
-                            button.textContent = 'Rated!';
-                            button.classList.add('bg-green-500');
-                            
-                            setTimeout(() => {
-                                button.textContent = originalText;
-                                button.classList.remove('bg-green-500');
-                            }, 2000);
+                            // Show success message and disable button
+                            button.textContent = 'Thanks for reviewing!';
+                            button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                            button.classList.add('bg-gray-400', 'cursor-not-allowed');
+                            button.disabled = true;
                             
                             // Clear the rating selection
                             delete currentRatings[recipeName];
@@ -752,6 +796,40 @@
 
             // Load ratings when page loads
             loadRatings();
+            
+            // Function to scroll to a specific recipe
+            function scrollToRecipe(recipeName) {
+                // Find the recipe card with matching title
+                const recipeCards = document.querySelectorAll('#recipes-grid > div');
+                let targetCard = null;
+                
+                recipeCards.forEach(card => {
+                    const titleElement = card.querySelector('h3.recipe-title');
+                    if (titleElement && titleElement.textContent.trim() === recipeName) {
+                        targetCard = card;
+                    }
+                });
+                
+                if (targetCard) {
+                    // Scroll to the target recipe with some offset for the header
+                    const headerHeight = 80; // Approximate header height
+                    const cardTop = targetCard.offsetTop - headerHeight;
+                    
+                    window.scrollTo({
+                        top: cardTop,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Add a subtle highlight effect
+                    targetCard.style.transition = 'box-shadow 0.3s ease';
+                    targetCard.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
+                    
+                    // Remove highlight after a few seconds
+                    setTimeout(() => {
+                        targetCard.style.boxShadow = '';
+                    }, 3000);
+                }
+            }
 
             // Recipe modal functionality
             const modal = document.getElementById('recipe-modal');
