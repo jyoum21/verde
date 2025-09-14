@@ -12,5 +12,12 @@
     "user_name": "Daniel",
     "comment": "",
     "timestamp": "2025-09-13T22:57:33.374289"
+  },
+  {
+    "recipe_name": "lomo saltado",
+    "rating": 5,
+    "user_name": "Gasi Lyra",
+    "comment": "",
+    "timestamp": "2025-09-13T23:06:10.967049"
   }
 ]
