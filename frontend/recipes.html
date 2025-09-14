@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipes - verde</title>
+    <title>Search Recipes - verde</title>
     <!-- Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts for a clean, modern look -->
@@ -19,10 +19,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center">
-                    <a href="index.html" class="text-2xl font-bold text-green-600">verde</a>
+                    <a href="/" class="text-2xl font-bold text-green-600">verde</a>
                     <span class="ml-2 text-gray-500">recipes</span>
                 </div>
-                <a href="index.html" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                <a href="/" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
                     Back to Home
                 </a>
             </div>
@@ -31,40 +31,45 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Search and Filter Section -->
+        <h1 class="text-3xl font-bold text-center mb-8">Vegetarian Recipes by Popularity</h1>
+        
+        <!-- Search Section -->
         <div class="mb-8">
-            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-                <div class="flex-1 max-w-md">
-                    <input type="text" placeholder="Search recipes..." 
+            <div class="flex justify-center">
+                <div class="w-full max-w-md">
+                    <input type="text" id="search-input" placeholder="Search recipes by name or description..." 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                </div>
-                <div class="flex gap-2 flex-wrap">
-                    <button class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm hover:bg-green-200 transition">All</button>
-                    <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition">Vegetarian</button>
-                    <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition">Vegan</button>
-                    <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition">Gluten-Free</button>
                 </div>
             </div>
         </div>
 
+        <!-- Sort Options -->
+        <div class="mb-6 flex justify-center">
+            <div class="flex gap-2">
+                <button id="sort-popularity" class="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition">Popularity (Low to High)</button>
+                <button id="sort-rating" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Rating (Low to High)</button>
+                <button id="sort-time" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Cooking Time</button>
+            </div>
+        </div>
+
         <!-- Recipes Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Recipe Card 1 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=250&fit=crop&crop=center" 
-                     alt="Lentil Shepherd's Pie" class="w-full h-48 object-cover">
+        <div id="recipes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Recipe Card 1 - Lowest Popularity -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow" data-rating="4.5" data-time="40">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=250&fit=crop&crop=center" 
+                     alt="Ultimate Veggie Burger" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-lg font-semibold">Lentil Shepherd's Pie</h3>
+                        <h3 class="text-lg font-semibold cursor-pointer hover:text-green-600 transition-colors recipe-title">Ultimate Veggie Burger</h3>
                         <div class="flex items-center">
-                            <span class="text-yellow-400">★★★★★</span>
-                            <span class="text-sm text-gray-500 ml-1">(4.8)</span>
+                            <span class="text-yellow-400">★★★★☆</span>
+                            <span class="text-sm text-gray-500 ml-1">(4.5)</span>
                         </div>
                     </div>
-                    <p class="text-gray-600 text-sm mb-3">A hearty vegetarian twist on the classic shepherd's pie, featuring savory lentils and vegetables topped with creamy mashed potatoes.</p>
+                    <p class="text-gray-600 text-sm mb-3">Protein-packed veggie burger with black beans, quinoa, and mushrooms. Holds together perfectly on the grill.</p>
                     <div class="flex items-center justify-between text-sm text-gray-500">
-                        <span>⏱️ 45 min</span>
-                        <span>👥 6 servings</span>
+                        <span>⏱️ 40 min</span>
+                        <span>👥 4 servings</span>
                         <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full">Vegetarian</span>
                     </div>
                     <!-- Rating Section -->
@@ -72,32 +77,32 @@
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-sm font-medium text-gray-700">Rate this recipe:</span>
                             <div class="flex items-center">
-                                <span class="text-sm text-gray-500 mr-2" id="lentil-shepherds-pie-rating-display">★★★★★ (4.8)</span>
+                                <span class="text-sm text-gray-500 mr-2" id="ultimate-veggie-burger-rating-display">★★★★☆ (4.5)</span>
                             </div>
                         </div>
                         <div class="flex items-center space-x-1 mb-2">
-                            <button class="star-rating" data-recipe="Lentil Shepherd's Pie" data-rating="1" data-target="lentil-shepherds-pie-rating-display">
+                            <button class="star-rating" data-recipe="Ultimate Veggie Burger" data-rating="1" data-target="ultimate-veggie-burger-rating-display">
                                 <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
                             </button>
-                            <button class="star-rating" data-recipe="Lentil Shepherd's Pie" data-rating="2" data-target="lentil-shepherds-pie-rating-display">
+                            <button class="star-rating" data-recipe="Ultimate Veggie Burger" data-rating="2" data-target="ultimate-veggie-burger-rating-display">
                                 <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
                             </button>
-                            <button class="star-rating" data-recipe="Lentil Shepherd's Pie" data-rating="3" data-target="lentil-shepherds-pie-rating-display">
+                            <button class="star-rating" data-recipe="Ultimate Veggie Burger" data-rating="3" data-target="ultimate-veggie-burger-rating-display">
                                 <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
                             </button>
-                            <button class="star-rating" data-recipe="Lentil Shepherd's Pie" data-rating="4" data-target="lentil-shepherds-pie-rating-display">
+                            <button class="star-rating" data-recipe="Ultimate Veggie Burger" data-rating="4" data-target="ultimate-veggie-burger-rating-display">
                                 <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
                             </button>
-                            <button class="star-rating" data-recipe="Lentil Shepherd's Pie" data-rating="5" data-target="lentil-shepherds-pie-rating-display">
+                            <button class="star-rating" data-recipe="Ultimate Veggie Burger" data-rating="5" data-target="ultimate-veggie-burger-rating-display">
                                 <span class="text-gray-300 hover:text-yellow-400 transition-colors">★</span>
                             </button>
                         </div>
                         <div class="flex items-center space-x-2">
                             <input type="text" placeholder="Your name (optional)" 
                                    class="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-500"
-                                   data-recipe="Lentil Shepherd's Pie">
+                                   data-recipe="Ultimate Veggie Burger">
                             <button class="submit-rating px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition"
-                                    data-recipe="Lentil Shepherd's Pie">
+                                    data-recipe="Ultimate Veggie Burger">
                                 Rate
                             </button>
                         </div>
@@ -109,17 +114,17 @@
                         <div class="space-y-2">
                             <div class="text-sm">
                                 <div class="flex items-center mb-1">
-                                    <span class="font-medium">Sarah M.</span>
+                                    <span class="font-medium">Alex T.</span>
                                     <span class="text-yellow-400 ml-2">★★★★★</span>
                                 </div>
-                                <p class="text-gray-600">"Absolutely delicious! My family couldn't tell it was vegetarian. The lentils add such great texture."</p>
+                                <p class="text-gray-600">"Finally, a veggie burger that doesn't fall apart! Great texture and flavor. Perfect for BBQs."</p>
                             </div>
                             <div class="text-sm">
                                 <div class="flex items-center mb-1">
-                                    <span class="font-medium">Mike R.</span>
+                                    <span class="font-medium">Maria G.</span>
                                     <span class="text-yellow-400 ml-2">★★★★☆</span>
                                 </div>
-                                <p class="text-gray-600">"Great comfort food! Perfect for cold winter nights."</p>
+                                <p class="text-gray-600">"Really good! The combination of beans and quinoa works perfectly. Kids loved it too."</p>
                             </div>
                         </div>
                     </div>
@@ -127,12 +132,12 @@
             </div>
 
             <!-- Recipe Card 2 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow" data-rating="4.6" data-time="50">
                 <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400&h=250&fit=crop&crop=center" 
                      alt="Mushroom Bolognese" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-lg font-semibold">Mushroom Bolognese</h3>
+                        <h3 class="text-lg font-semibold cursor-pointer hover:text-green-600 transition-colors recipe-title">Mushroom Bolognese</h3>
                         <div class="flex items-center">
                             <span class="text-yellow-400">★★★★★</span>
                             <span class="text-sm text-gray-500 ml-1">(4.9)</span>
@@ -204,12 +209,12 @@
             </div>
 
             <!-- Recipe Card 3 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow" data-rating="4.7" data-time="60">
                 <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=250&fit=crop&crop=center" 
                      alt="Tofu Tikka Masala" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-lg font-semibold">Tofu Tikka Masala</h3>
+                        <h3 class="text-lg font-semibold cursor-pointer hover:text-green-600 transition-colors recipe-title">Tofu Tikka Masala</h3>
                         <div class="flex items-center">
                             <span class="text-yellow-400">★★★★☆</span>
                             <span class="text-sm text-gray-500 ml-1">(4.6)</span>
@@ -281,12 +286,12 @@
             </div>
 
             <!-- Recipe Card 4 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow" data-rating="4.8" data-time="25">
                 <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=250&fit=crop&crop=center" 
                      alt="Veggie Pot Pie" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-lg font-semibold">Veggie Pot Pie</h3>
+                        <h3 class="text-lg font-semibold cursor-pointer hover:text-green-600 transition-colors recipe-title">Veggie Pot Pie</h3>
                         <div class="flex items-center">
                             <span class="text-yellow-400">★★★★★</span>
                             <span class="text-sm text-gray-500 ml-1">(4.7)</span>
@@ -358,12 +363,12 @@
             </div>
 
             <!-- Recipe Card 5 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow" data-rating="4.8" data-time="45">
                 <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=250&fit=crop&crop=center" 
                      alt="Veggie Burger" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-lg font-semibold">Ultimate Veggie Burger</h3>
+                        <h3 class="text-lg font-semibold cursor-pointer hover:text-green-600 transition-colors recipe-title">Ultimate Veggie Burger</h3>
                         <div class="flex items-center">
                             <span class="text-yellow-400">★★★★☆</span>
                             <span class="text-sm text-gray-500 ml-1">(4.5)</span>
@@ -435,12 +440,12 @@
             </div>
 
             <!-- Recipe Card 6 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow" data-rating="4.9" data-time="35">
                 <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=250&fit=crop&crop=center" 
                      alt="Quinoa Stir Fry" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-lg font-semibold">Quinoa Vegetable Stir Fry</h3>
+                        <h3 class="text-lg font-semibold cursor-pointer hover:text-green-600 transition-colors recipe-title">Quinoa Vegetable Stir Fry</h3>
                         <div class="flex items-center">
                             <span class="text-yellow-400">★★★★★</span>
                             <span class="text-sm text-gray-500 ml-1">(4.8)</span>
@@ -520,15 +525,55 @@
         </div>
     </main>
 
+    <!-- Recipe Details Modal -->
+    <div id="recipe-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+                <h2 id="modal-recipe-title" class="text-2xl font-bold text-green-600"></h2>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">
+                    ×
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Ingredients -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Ingredients</h3>
+                        <ul id="modal-ingredients" class="space-y-2 text-gray-700">
+                            <!-- Ingredients will be populated here -->
+                        </ul>
+                    </div>
+                    <!-- Instructions -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Instructions</h3>
+                        <ol id="modal-instructions" class="space-y-3 text-gray-700">
+                            <!-- Instructions will be populated here -->
+                        </ol>
+                    </div>
+                </div>
+                <!-- Recipe Info -->
+                <div class="mt-8 pt-6 border-t">
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span id="modal-cooking-time"></span>
+                        <span id="modal-servings"></span>
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">Vegetarian</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Simple search functionality and rating system
+        // Enhanced search functionality and rating system
         document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.querySelector('input[placeholder="Search recipes..."]');
-            const filterButtons = document.querySelectorAll('.flex.gap-2 button');
-            const recipeCards = document.querySelectorAll('.grid > div');
+            const searchInput = document.getElementById('search-input');
+            const sortButtons = document.querySelectorAll('#sort-popularity, #sort-rating, #sort-time');
+            const recipesGrid = document.getElementById('recipes-grid');
+            const recipeCards = document.querySelectorAll('#recipes-grid > div');
             
             // Rating system variables
             const currentRatings = {}; // Store current user ratings
+            let currentSort = 'popularity'; // Default sort
 
             // Search functionality
             searchInput.addEventListener('input', (e) => {
@@ -545,11 +590,38 @@
                 });
             });
 
-            // Filter functionality
-            filterButtons.forEach(button => {
+            // Sort functionality
+            function sortRecipes(sortType) {
+                const cards = Array.from(recipeCards);
+                
+                cards.sort((a, b) => {
+                    switch(sortType) {
+                        case 'popularity':
+                            // Sort by rating (low to high)
+                            return parseFloat(a.dataset.rating) - parseFloat(b.dataset.rating);
+                        case 'rating':
+                            // Sort by rating (low to high)
+                            return parseFloat(a.dataset.rating) - parseFloat(b.dataset.rating);
+                        case 'time':
+                            // Sort by cooking time (low to high)
+                            return parseInt(a.dataset.time) - parseInt(b.dataset.time);
+                        default:
+                            return 0;
+                    }
+                });
+                
+                // Clear the grid and re-append sorted cards
+                recipesGrid.innerHTML = '';
+                cards.forEach(card => {
+                    recipesGrid.appendChild(card);
+                });
+            }
+
+            // Sort button event listeners
+            sortButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     // Remove active class from all buttons
-                    filterButtons.forEach(btn => {
+                    sortButtons.forEach(btn => {
                         btn.classList.remove('bg-green-100', 'text-green-700');
                         btn.classList.add('bg-gray-100', 'text-gray-700');
                     });
@@ -558,24 +630,19 @@
                     button.classList.remove('bg-gray-100', 'text-gray-700');
                     button.classList.add('bg-green-100', 'text-green-700');
                     
-                    const filter = button.textContent.toLowerCase();
+                    // Determine sort type
+                    if (button.id === 'sort-popularity') {
+                        currentSort = 'popularity';
+                    } else if (button.id === 'sort-rating') {
+                        currentSort = 'rating';
+                    } else if (button.id === 'sort-time') {
+                        currentSort = 'time';
+                    }
                     
-                    recipeCards.forEach(card => {
-                        if (filter === 'all') {
-                            card.style.display = 'block';
-                        } else {
-                            const tags = card.querySelectorAll('span');
-                            let hasTag = false;
-                            tags.forEach(tag => {
-                                if (tag.textContent.toLowerCase().includes(filter)) {
-                                    hasTag = true;
-                                }
-                            });
-                            card.style.display = hasTag ? 'block' : 'none';
-                        }
-                    });
+                    sortRecipes(currentSort);
                 });
             });
+
 
             // Rating system functionality
             function updateStarDisplay(recipeName, rating) {
@@ -685,6 +752,236 @@
 
             // Load ratings when page loads
             loadRatings();
+
+            // Recipe modal functionality
+            const modal = document.getElementById('recipe-modal');
+            const closeModal = document.getElementById('close-modal');
+            const modalTitle = document.getElementById('modal-recipe-title');
+            const modalIngredients = document.getElementById('modal-ingredients');
+            const modalInstructions = document.getElementById('modal-instructions');
+            const modalCookingTime = document.getElementById('modal-cooking-time');
+            const modalServings = document.getElementById('modal-servings');
+
+            // Recipe data
+            const recipeData = {
+                "Ultimate Veggie Burger": {
+                    ingredients: [
+                        "1 can black beans, drained and rinsed",
+                        "1 cup cooked quinoa",
+                        "1/2 cup mushrooms, finely chopped",
+                        "1/4 cup breadcrumbs",
+                        "1 egg (or flax egg for vegan)",
+                        "2 cloves garlic, minced",
+                        "1 tsp cumin",
+                        "1 tsp paprika",
+                        "Salt and pepper to taste",
+                        "4 burger buns",
+                        "Lettuce, tomato, onion for serving"
+                    ],
+                    instructions: [
+                        "Mash black beans in a large bowl",
+                        "Add quinoa, mushrooms, breadcrumbs, egg, garlic, and spices",
+                        "Mix until well combined",
+                        "Form into 4 patties",
+                        "Heat oil in a pan over medium heat",
+                        "Cook patties for 4-5 minutes per side until golden",
+                        "Serve on buns with desired toppings"
+                    ],
+                    time: "40 min",
+                    servings: "4 servings"
+                },
+                "Tofu Tikka Masala": {
+                    ingredients: [
+                        "1 block firm tofu, cubed",
+                        "1 can coconut milk",
+                        "1 can diced tomatoes",
+                        "1 onion, diced",
+                        "3 cloves garlic, minced",
+                        "1 inch ginger, grated",
+                        "2 tbsp tikka masala spice blend",
+                        "1 tsp turmeric",
+                        "1 tsp garam masala",
+                        "2 tbsp olive oil",
+                        "Fresh cilantro for garnish",
+                        "Basmati rice for serving"
+                    ],
+                    instructions: [
+                        "Press tofu and cut into cubes",
+                        "Heat oil in a large pan over medium heat",
+                        "Add onion and cook until soft",
+                        "Add garlic, ginger, and spices",
+                        "Add tomatoes and coconut milk",
+                        "Simmer for 15 minutes",
+                        "Add tofu and cook for 10 more minutes",
+                        "Serve over rice with cilantro"
+                    ],
+                    time: "50 min",
+                    servings: "4 servings"
+                },
+                "Veggie Pot Pie": {
+                    ingredients: [
+                        "2 cups mixed vegetables (carrots, peas, corn)",
+                        "1 cup mushrooms, sliced",
+                        "1/2 cup butter",
+                        "1/2 cup flour",
+                        "2 cups vegetable broth",
+                        "1/2 cup milk",
+                        "1 sheet puff pastry",
+                        "1 onion, diced",
+                        "2 cloves garlic, minced",
+                        "1 tsp thyme",
+                        "Salt and pepper to taste"
+                    ],
+                    instructions: [
+                        "Preheat oven to 400°F",
+                        "Cook vegetables until tender",
+                        "Make roux with butter and flour",
+                        "Add broth and milk gradually",
+                        "Season with herbs and spices",
+                        "Add vegetables to sauce",
+                        "Pour into pie dish",
+                        "Cover with pastry and bake 25 minutes"
+                    ],
+                    time: "60 min",
+                    servings: "6 servings"
+                },
+                "Quinoa Vegetable Stir Fry": {
+                    ingredients: [
+                        "1 cup quinoa, cooked",
+                        "2 cups mixed vegetables",
+                        "3 tbsp soy sauce",
+                        "2 tbsp sesame oil",
+                        "2 cloves garlic, minced",
+                        "1 inch ginger, grated",
+                        "2 green onions, sliced",
+                        "1 tbsp rice vinegar",
+                        "1 tsp honey",
+                        "Sesame seeds for garnish"
+                    ],
+                    instructions: [
+                        "Cook quinoa according to package directions",
+                        "Heat sesame oil in a large wok",
+                        "Add garlic and ginger, stir for 30 seconds",
+                        "Add vegetables and stir-fry for 5 minutes",
+                        "Add cooked quinoa",
+                        "Mix in soy sauce, vinegar, and honey",
+                        "Garnish with green onions and sesame seeds"
+                    ],
+                    time: "25 min",
+                    servings: "3 servings"
+                },
+                "Lentil Shepherd's Pie": {
+                    ingredients: [
+                        "1 cup green lentils",
+                        "2 lbs potatoes, peeled and cubed",
+                        "1 onion, diced",
+                        "2 carrots, diced",
+                        "1 cup frozen peas",
+                        "2 cloves garlic, minced",
+                        "2 tbsp tomato paste",
+                        "1 cup vegetable broth",
+                        "1/2 cup milk",
+                        "4 tbsp butter",
+                        "1 tsp thyme",
+                        "Salt and pepper to taste"
+                    ],
+                    instructions: [
+                        "Cook lentils until tender",
+                        "Boil potatoes until soft",
+                        "Mash potatoes with butter and milk",
+                        "Sauté onion and carrots",
+                        "Add garlic, tomato paste, and broth",
+                        "Add lentils and peas",
+                        "Season with herbs and spices",
+                        "Top with mashed potatoes and bake 20 minutes"
+                    ],
+                    time: "45 min",
+                    servings: "6 servings"
+                },
+                "Mushroom Bolognese": {
+                    ingredients: [
+                        "1 lb mixed mushrooms, chopped",
+                        "1 onion, diced",
+                        "2 carrots, diced",
+                        "2 celery stalks, diced",
+                        "4 cloves garlic, minced",
+                        "1 can crushed tomatoes",
+                        "1/2 cup red wine",
+                        "2 tbsp olive oil",
+                        "1 tsp oregano",
+                        "1 tsp basil",
+                        "Parmesan cheese (optional)",
+                        "Pasta of choice"
+                    ],
+                    instructions: [
+                        "Heat oil in a large pot",
+                        "Sauté onion, carrots, and celery",
+                        "Add mushrooms and cook until browned",
+                        "Add garlic and cook 1 minute",
+                        "Add wine and let it reduce",
+                        "Add tomatoes and herbs",
+                        "Simmer for 30 minutes",
+                        "Serve over pasta with cheese"
+                    ],
+                    time: "35 min",
+                    servings: "4 servings"
+                }
+            };
+
+            // Function to show recipe modal
+            function showRecipeModal(recipeName) {
+                const recipe = recipeData[recipeName];
+                if (!recipe) return;
+
+                modalTitle.textContent = recipeName;
+                
+                // Populate ingredients
+                modalIngredients.innerHTML = '';
+                recipe.ingredients.forEach(ingredient => {
+                    const li = document.createElement('li');
+                    li.textContent = ingredient;
+                    li.className = 'flex items-start';
+                    li.innerHTML = `<span class="mr-2">•</span>${ingredient}`;
+                    modalIngredients.appendChild(li);
+                });
+
+                // Populate instructions
+                modalInstructions.innerHTML = '';
+                recipe.instructions.forEach((instruction, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = instruction;
+                    li.className = 'flex items-start';
+                    li.innerHTML = `<span class="mr-3 font-semibold text-green-600">${index + 1}.</span>${instruction}`;
+                    modalInstructions.appendChild(li);
+                });
+
+                // Populate cooking info
+                modalCookingTime.textContent = `⏱️ ${recipe.time}`;
+                modalServings.textContent = `👥 ${recipe.servings}`;
+
+                // Show modal
+                modal.classList.remove('hidden');
+            }
+
+            // Close modal functionality
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+
+            // Add click handlers to recipe titles
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('recipe-title')) {
+                    const recipeName = e.target.textContent.trim();
+                    showRecipeModal(recipeName);
+                }
+            });
         });
     </script>
 
