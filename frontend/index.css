@@ -8,6 +8,32 @@ body {
     transition: opacity 0.3s ease-in-out;
 }
 
+/* Horizontal scrolling animation */
+.scrolling-container {
+    position: relative;
+    width: 100%;
+}
+
+.scrolling-content {
+    display: flex;
+    animation: scroll 30s linear infinite;
+    width: calc(200% + 2rem); /* Double width to accommodate duplicates */
+}
+
+.scrolling-content:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Legacy scrollbar styles for fallback */
 .example-scroller::-webkit-scrollbar {
     height: 8px;
 }

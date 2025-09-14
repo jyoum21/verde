@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipes - verde</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a clean, modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+  </head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold text-green-600">verde</a>
+                    <span class="ml-2 text-gray-500">recipes</span>
+                </div>
+                <a href="index.html" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search and Filter Section -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div class="flex-1 max-w-md">
+                    <input type="text" placeholder="Search recipes..." 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <button class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm hover:bg-green-200 transition">All</button>
+                    <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition">Vegetarian</button>
+                    <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition">Vegan</button>
+                    <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition">Gluten-Free</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipes Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Recipe Card 1 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=250&fit=crop&crop=center" 
+                     alt="Lentil Shepherd's Pie" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Lentil Shepherd's Pie</h3>
+                        <div class="flex items-center">
+                            <span class="text-yellow-400">★★★★★</span>
+                            <span class="text-sm text-gray-500 ml-1">(4.8)</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3">A hearty vegetarian twist on the classic shepherd's pie, featuring savory lentils and vegetables topped with creamy mashed potatoes.</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>⏱️ 45 min</span>
+                        <span>👥 6 servings</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full">Vegetarian</span>
+                    </div>
+                </div>
+                <div class="px-6 pb-4">
+                    <div class="border-t pt-3">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Recent Reviews:</h4>
+                        <div class="space-y-2">
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Sarah M.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★★</span>
+                                </div>
+                                <p class="text-gray-600">"Absolutely delicious! My family couldn't tell it was vegetarian. The lentils add such great texture."</p>
+                            </div>
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Mike R.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★☆</span>
+                                </div>
+                                <p class="text-gray-600">"Great comfort food! Perfect for cold winter nights."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 2 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <img src="https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&h=250&fit=crop&crop=center" 
+                     alt="Mushroom Bolognese" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Mushroom Bolognese</h3>
+                        <div class="flex items-center">
+                            <span class="text-yellow-400">★★★★★</span>
+                            <span class="text-sm text-gray-500 ml-1">(4.9)</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3">Rich and meaty mushroom-based sauce that rivals traditional bolognese. Perfect over your favorite pasta.</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>⏱️ 35 min</span>
+                        <span>👥 4 servings</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full">Vegetarian</span>
+                    </div>
+                </div>
+                <div class="px-6 pb-4">
+                    <div class="border-t pt-3">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Recent Reviews:</h4>
+                        <div class="space-y-2">
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Emma L.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★★</span>
+                                </div>
+                                <p class="text-gray-600">"This is incredible! The mushrooms create such a rich, umami flavor. My kids love it!"</p>
+                            </div>
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">David K.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★★</span>
+                                </div>
+                                <p class="text-gray-600">"Best vegetarian pasta sauce I've ever had. Restaurant quality!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 3 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=250&fit=crop&crop=center" 
+                     alt="Tofu Tikka Masala" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Tofu Tikka Masala</h3>
+                        <div class="flex items-center">
+                            <span class="text-yellow-400">★★★★☆</span>
+                            <span class="text-sm text-gray-500 ml-1">(4.6)</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3">Creamy, spiced tomato sauce with perfectly marinated tofu. A vegetarian take on the Indian classic.</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>⏱️ 50 min</span>
+                        <span>👥 4 servings</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full">Vegetarian</span>
+                    </div>
+                </div>
+                <div class="px-6 pb-4">
+                    <div class="border-t pt-3">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Recent Reviews:</h4>
+                        <div class="space-y-2">
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Priya S.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★★</span>
+                                </div>
+                                <p class="text-gray-600">"Authentic flavors! The tofu absorbs the spices beautifully. Served with basmati rice - perfect!"</p>
+                            </div>
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Tom W.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★☆</span>
+                                </div>
+                                <p class="text-gray-600">"Great recipe! The sauce is rich and flavorful. Will definitely make again."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 4 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=250&fit=crop&crop=center" 
+                     alt="Veggie Pot Pie" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Veggie Pot Pie</h3>
+                        <div class="flex items-center">
+                            <span class="text-yellow-400">★★★★★</span>
+                            <span class="text-sm text-gray-500 ml-1">(4.7)</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3">Comforting vegetable pot pie with a flaky crust. Packed with seasonal vegetables in a creamy sauce.</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>⏱️ 60 min</span>
+                        <span>👥 6 servings</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full">Vegetarian</span>
+                    </div>
+                </div>
+                <div class="px-6 pb-4">
+                    <div class="border-t pt-3">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Recent Reviews:</h4>
+                        <div class="space-y-2">
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Lisa H.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★★</span>
+                                </div>
+                                <p class="text-gray-600">"Perfect comfort food! The crust is flaky and the filling is so flavorful. Great for meal prep too!"</p>
+                            </div>
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">James P.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★☆</span>
+                                </div>
+                                <p class="text-gray-600">"Delicious and hearty. The vegetables stay crisp and the sauce is perfectly seasoned."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 5 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=250&fit=crop&crop=center" 
+                     alt="Veggie Burger" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Ultimate Veggie Burger</h3>
+                        <div class="flex items-center">
+                            <span class="text-yellow-400">★★★★☆</span>
+                            <span class="text-sm text-gray-500 ml-1">(4.5)</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3">Protein-packed veggie burger with black beans, quinoa, and mushrooms. Holds together perfectly on the grill.</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>⏱️ 40 min</span>
+                        <span>👥 4 servings</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full">Vegetarian</span>
+                    </div>
+                </div>
+                <div class="px-6 pb-4">
+                    <div class="border-t pt-3">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Recent Reviews:</h4>
+                        <div class="space-y-2">
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Alex T.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★★</span>
+                                </div>
+                                <p class="text-gray-600">"Finally, a veggie burger that doesn't fall apart! Great texture and flavor. Perfect for BBQs."</p>
+                            </div>
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Maria G.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★☆</span>
+                                </div>
+                                <p class="text-gray-600">"Really good! The combination of beans and quinoa works perfectly. Kids loved it too."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Card 6 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=250&fit=crop&crop=center" 
+                     alt="Quinoa Stir Fry" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Quinoa Vegetable Stir Fry</h3>
+                        <div class="flex items-center">
+                            <span class="text-yellow-400">★★★★★</span>
+                            <span class="text-sm text-gray-500 ml-1">(4.8)</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3">Quick and nutritious stir fry with quinoa, fresh vegetables, and a savory sauce. Ready in under 30 minutes!</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>⏱️ 25 min</span>
+                        <span>👥 3 servings</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full">Vegetarian</span>
+                    </div>
+                </div>
+                <div class="px-6 pb-4">
+                    <div class="border-t pt-3">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Recent Reviews:</h4>
+                        <div class="space-y-2">
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Rachel B.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★★</span>
+                                </div>
+                                <p class="text-gray-600">"Perfect weeknight meal! So quick to make and packed with nutrients. The quinoa adds great texture."</p>
+                            </div>
+                            <div class="text-sm">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-medium">Kevin M.</span>
+                                    <span class="text-yellow-400 ml-2">★★★★☆</span>
+                                </div>
+                                <p class="text-gray-600">"Great recipe for meal prep! The vegetables stay crisp and the sauce is delicious."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="text-center mt-12">
+            <button class="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-lg">
+                Load More Recipes
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Simple search functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.querySelector('input[placeholder="Search recipes..."]');
+            const filterButtons = document.querySelectorAll('.flex.gap-2 button');
+            const recipeCards = document.querySelectorAll('.grid > div');
+
+            // Search functionality
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                recipeCards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    const description = card.querySelector('p').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // Filter functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('bg-green-100', 'text-green-700');
+                        btn.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    
+                    // Add active class to clicked button
+                    button.classList.remove('bg-gray-100', 'text-gray-700');
+                    button.classList.add('bg-green-100', 'text-green-700');
+                    
+                    const filter = button.textContent.toLowerCase();
+                    
+                    recipeCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'block';
+                        } else {
+                            const tags = card.querySelectorAll('span');
+                            let hasTag = false;
+                            tags.forEach(tag => {
+                                if (tag.textContent.toLowerCase().includes(filter)) {
+                                    hasTag = true;
+                                }
+                            });
+                            card.style.display = hasTag ? 'block' : 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
