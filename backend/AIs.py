@@ -8,24 +8,44 @@ client = Cerebras(
     api_key=os.environ.get("CEREBRAS_API_KEY"),
 )
 
+def filter_ai(input_recipe):
+  with open('contexts/filter_ai_context.txt', 'r') as file:
+    system_content = file.read()
+  chat_completion = client.chat.completions.create(
+    messages=[
+        {
+            "role": "system",
+            "content": system_content,
+        },
+        {
+            "role": "user", 
+            "content": input_recipe
+        }
+    ],
+      model="llama-4-scout-17b-16e-instruct",
+  )
+  return chat_completion == "yes"
+
 def vegify(input_recipe, restrictions):
   '''
   Vegify is a function that will take in a recipe and a list of restrictions (represented as strings), and return a recipe that follows the restrictions.
   '''
   
+  if not(filter_ai(input_recipe)):
+    return "We could not identify this as a dish or recipe"
+
   formatted_recipe = preparation_ai(input_recipe)
-  if formatted_recipe == "Not a recipe":
-    return "Sorry, something went wrong here."
+  print(formatted_recipe)
+
   suggestions = brainstorm_ai(formatted_recipe, restrictions)
   new_recipe = integration_ai(formatted_recipe, suggestions, restrictions)
   
   if checker_ai(new_recipe, restrictions):
     return new_recipe
   else:
-    return "Sorry, something went wrong."
+    return vegify(input_recipe, restrictions)
 
 def preparation_ai(input_recipe):  
-  # Load the system prompt from the text file
   with open('contexts/prep_ai_context.txt', 'r') as file:
     system_content = file.read()
   
@@ -104,8 +124,3 @@ def checker_ai(input_recipe, restrictions):
   )
 
   return chat_completion.choices[0].message.content == "yes"
-
-# Test code - commented out to avoid import errors
-# with open('test.txt', 'r') as file:
-#   system_content = file.read()
-# print(vegify(system_content, ["vegetarian"]))

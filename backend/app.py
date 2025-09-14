@@ -5,6 +5,9 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import os
 import traceback
+import json
+from datetime import datetime
+from typing import List, Optional
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -39,6 +42,61 @@ class RecipeResponse(BaseModel):
     vegetarian_recipe: str
     success: bool
     error_message: str = None
+
+class RatingRequest(BaseModel):
+    recipe_name: str
+    rating: int  # 1-5 stars
+    user_name: Optional[str] = "Anonymous"
+    comment: Optional[str] = ""
+
+class RatingResponse(BaseModel):
+    success: bool
+    message: str
+    average_rating: Optional[float] = None
+    total_ratings: Optional[int] = None
+
+class RecipeRating(BaseModel):
+    recipe_name: str
+    rating: int
+    user_name: str
+    comment: str
+    timestamp: str
+
+# Rating storage functions
+RATINGS_FILE = "ratings.json"
+
+def load_ratings():
+    """Load ratings from JSON file"""
+    try:
+        if os.path.exists(RATINGS_FILE):
+            with open(RATINGS_FILE, 'r') as f:
+                return json.load(f)
+        return []
+    except Exception as e:
+        print(f"Error loading ratings: {e}")
+        return []
+
+def save_ratings(ratings):
+    """Save ratings to JSON file"""
+    try:
+        with open(RATINGS_FILE, 'w') as f:
+            json.dump(ratings, f, indent=2)
+        return True
+    except Exception as e:
+        print(f"Error saving ratings: {e}")
+        return False
+
+def get_recipe_stats(recipe_name):
+    """Get rating statistics for a recipe"""
+    ratings = load_ratings()
+    recipe_ratings = [r for r in ratings if r['recipe_name'] == recipe_name]
+    
+    if not recipe_ratings:
+        return 0.0, 0
+    
+    total_rating = sum(r['rating'] for r in recipe_ratings)
+    average_rating = total_rating / len(recipe_ratings)
+    return round(average_rating, 1), len(recipe_ratings)
 
 @app.get("/")
 async def serve_frontend():
@@ -130,6 +188,103 @@ async def debug_info():
         debug_info["ai_import"] = str(e)
     
     return debug_info
+
+@app.post("/api/rate-recipe", response_model=RatingResponse)
+async def rate_recipe(request: RatingRequest):
+    """API endpoint to rate a recipe"""
+    try:
+        # Validate rating
+        if request.rating < 1 or request.rating > 5:
+            raise HTTPException(status_code=400, detail="Rating must be between 1 and 5")
+        
+        # Load existing ratings
+        ratings = load_ratings()
+        
+        # Create new rating
+        new_rating = {
+            "recipe_name": request.recipe_name,
+            "rating": request.rating,
+            "user_name": request.user_name or "Anonymous",
+            "comment": request.comment or "",
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # Add to ratings list
+        ratings.append(new_rating)
+        
+        # Save ratings
+        if save_ratings(ratings):
+            # Get updated stats
+            avg_rating, total_ratings = get_recipe_stats(request.recipe_name)
+            
+            return RatingResponse(
+                success=True,
+                message="Rating submitted successfully!",
+                average_rating=avg_rating,
+                total_ratings=total_ratings
+            )
+        else:
+            raise HTTPException(status_code=500, detail="Failed to save rating")
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error in rate_recipe: {e}")
+        return RatingResponse(
+            success=False,
+            message=f"Error submitting rating: {str(e)}"
+        )
+
+@app.get("/api/recipe-ratings/{recipe_name}")
+async def get_recipe_ratings(recipe_name: str):
+    """Get all ratings for a specific recipe"""
+    try:
+        ratings = load_ratings()
+        recipe_ratings = [r for r in ratings if r['recipe_name'] == recipe_name]
+        
+        avg_rating, total_ratings = get_recipe_stats(recipe_name)
+        
+        return {
+            "recipe_name": recipe_name,
+            "ratings": recipe_ratings,
+            "average_rating": avg_rating,
+            "total_ratings": total_ratings
+        }
+    
+    except Exception as e:
+        print(f"Error getting recipe ratings: {e}")
+        raise HTTPException(status_code=500, detail=f"Error retrieving ratings: {str(e)}")
+
+@app.get("/api/all-ratings")
+async def get_all_ratings():
+    """Get all ratings grouped by recipe"""
+    try:
+        ratings = load_ratings()
+        
+        # Group by recipe
+        recipe_stats = {}
+        for rating in ratings:
+            recipe_name = rating['recipe_name']
+            if recipe_name not in recipe_stats:
+                recipe_stats[recipe_name] = {
+                    "recipe_name": recipe_name,
+                    "ratings": [],
+                    "average_rating": 0.0,
+                    "total_ratings": 0
+                }
+            recipe_stats[recipe_name]["ratings"].append(rating)
+        
+        # Calculate stats for each recipe
+        for recipe_name, stats in recipe_stats.items():
+            avg_rating, total_ratings = get_recipe_stats(recipe_name)
+            stats["average_rating"] = avg_rating
+            stats["total_ratings"] = total_ratings
+        
+        return {"recipes": list(recipe_stats.values())}
+    
+    except Exception as e:
+        print(f"Error getting all ratings: {e}")
+        raise HTTPException(status_code=500, detail=f"Error retrieving ratings: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

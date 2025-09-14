@@ -1,0 +1,1 @@
+Help determine if the input is a valid dish. If the input is the name of a real dish, or gives the recipe for a real dish, then print the single word "yes". Otherwise, print "no".
