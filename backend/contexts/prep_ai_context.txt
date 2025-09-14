@@ -8,7 +8,7 @@ Overview
   - number of servings
   (if any of the above are not provided, give one based on how hard it is)
 Ingredients 
-  - each ingredient should be in bullet points in tuples of name, amount, any specification (don't include parenthesis in the tuples)
+  - each ingredient should be in bullet points in with, amount, specification (don't include parenthesis in the tuples)
 Instructions
   - Proceed in steps with designations name of step, and then a description of the step
 

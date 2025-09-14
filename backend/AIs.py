@@ -11,6 +11,8 @@ client = Cerebras(
 def filter_ai(input_recipe):
   with open('contexts/filter_ai_context.txt', 'r') as file:
     system_content = file.read()
+  
+  
   chat_completion = client.chat.completions.create(
     messages=[
         {
@@ -24,7 +26,17 @@ def filter_ai(input_recipe):
     ],
       model="llama-4-scout-17b-16e-instruct",
   )
-  return chat_completion == "yes"
+
+  response = chat_completion.choices[0].message.content
+  print(response)
+  response_lower = response.lower().strip()
+
+  if "yes" in response_lower and "no" not in response_lower:
+    return True  # Valid recipe
+  elif "no" in response_lower:
+      return False  # Not a valid recipe
+  else:
+      return True  # Fallback: assume valid
 
 def vegify(input_recipe, restrictions):
   '''
