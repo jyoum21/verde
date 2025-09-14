@@ -45,6 +45,7 @@ async def serve_frontend():
     """Serve the main frontend page"""
     return FileResponse("../frontend/index.html")
 
+
 @app.post("/generate-recipe", response_model=RecipeResponse)
 async def generate_recipe(request: RecipeRequest):
     """API endpoint to generate vegetarian recipes using AI pipeline"""
